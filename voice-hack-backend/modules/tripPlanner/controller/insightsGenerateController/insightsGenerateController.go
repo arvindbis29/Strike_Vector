@@ -9,6 +9,52 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+
+func FinalSummaryGenerate(ginCtx *gin.Context) {
+	// Bind Input
+	apiInputParam, bindErr := BindInputParams(ginCtx)
+	apiResponse := insightsGenerateModel.ApiResponse{}
+
+	// Always create logs at the end
+	defer func() {
+		insightsGenerateModel.CreateApplicationLogs(ginCtx, apiInputParam, apiResponse)
+	}()
+
+	if bindErr != nil {
+		apiResponse.Code = http.StatusBadRequest
+		apiResponse.Status = "Failure"
+		apiResponse.Error = bindErr.Error()
+		ReturnApiResponse(ginCtx, http.StatusBadRequest, apiResponse)
+		return
+	}
+
+	// Generate final summary from stored JSON
+	resp, respErr := insightsGenerateModel.FinalSummary(apiInputParam)
+	if respErr != nil {
+		apiResponse.Code = http.StatusInternalServerError
+		apiResponse.Status = "Failure"
+		apiResponse.Error = respErr.Error()
+		ReturnApiResponse(ginCtx, http.StatusInternalServerError, apiResponse)
+		return
+	}
+
+	// Safety check: ensure resp is not nil
+	if resp == nil {
+		apiResponse.Code = http.StatusOK
+		apiResponse.Status = "Success"
+		apiResponse.Error = "No insights generated"
+		ReturnApiResponse(ginCtx, http.StatusOK, apiResponse)
+		return
+	}
+
+	// Prepare response
+	apiResponse.Response.Locations = []insightsGenerateModel.Ensights{*resp}
+	apiResponse.Code = http.StatusOK
+	apiResponse.Status = "Success"
+
+	ReturnApiResponse(ginCtx, http.StatusOK, apiResponse)
+}
+
 func FindDestination(ginCtx *gin.Context) {
 	apiInputParam, bindErr := BindInputParams(ginCtx)
 	apiResponse := insightsGenerateModel.ApiResponse{}
@@ -62,6 +108,7 @@ func FindDestination(ginCtx *gin.Context) {
 		ReturnApiResponse(ginCtx, http.StatusBadRequest, apiResponse)
 		return
 	}
+	insightsGenerateModel.StoreInsightsToJSON(resp.Locations)
 
 	apiResponse.Code = http.StatusOK
 	apiResponse.Status = "Success"

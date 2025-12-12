@@ -12,5 +12,9 @@ func RouteRequests(ginServer *gin.Engine) {
 	apiGroup.POST("/generate/", insightsGenerateController.FindDestination)
 	apiGroup.GET("/generate", insightsGenerateController.FindDestination)
 	apiGroup.GET("/generate/", insightsGenerateController.FindDestination)
+	apiGroup.POST("/final", insightsGenerateController.FinalSummaryGenerate)
+	apiGroup.POST("/final/", insightsGenerateController.FinalSummaryGenerate)
+	apiGroup.GET("/final", insightsGenerateController.FinalSummaryGenerate)
+	apiGroup.GET("/final/", insightsGenerateController.FinalSummaryGenerate)
 
 }

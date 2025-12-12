@@ -1,0 +1,83 @@
+[
+  {
+    "EnsightType": "call_1",
+    "Concerns": "Images need to be removed and details are missing for some products; Some product images are low resolution and are causing issues; Important specifications are missing for some products.",
+    "Resolution": "Executive guided the customer on how to delete images and mentioned that she is handling low-resolution images. Executive also guided on how to add missing specifications by clicking 'view more' and filling in details like 'tank capacity'.",
+    "NextSteps": "Customer will upload available photos and inform her manager if further assistance is needed from the executive. Executive to inform if customer needs to add images themselves or if the executive will add them.",
+    "Alert": "None",
+    "Sentiment": "Neutral -\u003e Neutral",
+    "KeyPoints": "Catalog Update, Image Size, Missing Specifications, Product Score"
+  },
+  {
+    "EnsightType": "call_2",
+    "Concerns": "Issues with items being picked up without price; Need to add prices for better visibility and to address inquiry issues; Customer is concerned about wasting time on manual updates.",
+    "Resolution": "Executive explained that prices are crucial for visibility and to resolve inquiry issues. Advised adding standard pricing or MRP. Offered to make corrections himself if the customer provides details, and stated that grouping, mapping, PDFs, and videos are already in place.",
+    "NextSteps": "Customer will check and send product images. Executive will email the customer on 'director@lornaghorita.com' with a list of products needing corrections.",
+    "Alert": "None",
+    "Sentiment": "Neutral -\u003e Neutral",
+    "KeyPoints": "Catalog Update, Pricing, Visibility, Inquiries, Product Details"
+  },
+  {
+    "EnsightType": "call_3",
+    "Concerns": "No transcript available for analysis.",
+    "Resolution": "No resolution possible due to lack of transcript.",
+    "NextSteps": "No next steps possible due to lack of transcript.",
+    "Alert": "None",
+    "Sentiment": "Neutral",
+    "KeyPoints": "Missing Transcript"
+  },
+  {
+    "EnsightType": "call_1",
+    "Concerns": "Images need to be removed and re-added; Some images are low resolution; Missing important product specifications.",
+    "Resolution": "Executive guided the customer on how to delete and add images. Advised on filling missing specifications like 'tank capacity' for products to improve product score. Explained that adding specifications increases the product score.",
+    "NextSteps": "Customer will upload available photos and inform if further assistance is needed from the manager to add photos. Customer to inform when manager is available for video meet.",
+    "Alert": "None",
+    "Sentiment": "Neutral -\u003e Neutral",
+    "KeyPoints": "Catalog update, Image quality, Product specifications, Product score"
+  },
+  {
+    "EnsightType": "call_2",
+    "Concerns": "Catalog items are not being picked up without price; Customer is hesitant to add prices due to high dealer costs; Need for image updates for specific products.",
+    "Resolution": "Executive explained that adding standard pricing or MRP can boost visibility and inquiries. Offered to make corrections directly if the customer provides the details. Sent an email to the customer's provided ID listing products that need image updates.",
+    "NextSteps": "Customer will check the catalog and send required product images to the executive. Executive to send an email with a list of products needing image updates.",
+    "Alert": "None",
+    "Sentiment": "Neutral -\u003e Neutral",
+    "KeyPoints": "Catalog update, Pricing, Visibility, Product images, Email communication"
+  },
+  {
+    "EnsightType": "call_3",
+    "Concerns": "No transcript available for analysis.",
+    "Resolution": "No resolution possible due to lack of transcript.",
+    "NextSteps": "No next steps possible due to lack of transcript.",
+    "Alert": "None",
+    "Sentiment": "Neutral",
+    "KeyPoints": "Missing data"
+  },
+  {
+    "EnsightType": "call_1",
+    "Concerns": "Images are low resolution and need to be removed; Missing important product specifications.",
+    "Resolution": "Executive guided the customer on how to delete low-resolution images and add missing specifications, using 'Garden spray bottle 2 liter' as an example. Advised on how filling specifications increases product score.",
+    "NextSteps": "Customer will upload available photos and inform if further assistance is needed from the manager for specific photos. Executive to follow up on video meet.",
+    "Alert": "None",
+    "Sentiment": "Neutral -\u003e Neutral",
+    "KeyPoints": "Catalog Update, Image Quality, Product Specifications, Product Score"
+  },
+  {
+    "EnsightType": "call_2",
+    "Concerns": "Some items were not picked up due to missing prices; Customer is hesitant to add prices, citing high MRP.",
+    "Resolution": "Executive explained the importance of adding standard pricing for visibility and lead generation. Offered to make corrections himself if the customer provides the necessary details (images). Confirmed grouping, mapping, PDFs, and videos are in place.",
+    "NextSteps": "Customer will send required images to the executive's provided email ID. Executive will send a mail detailing products that need image updates.",
+    "Alert": "None",
+    "Sentiment": "Neutral -\u003e Neutral",
+    "KeyPoints": "Catalog Update, Pricing, Visibility, Leads, Images, Product Details"
+  },
+  {
+    "EnsightType": "call_3",
+    "Concerns": "No transcript available for analysis.",
+    "Resolution": "No resolution possible due to lack of transcript.",
+    "NextSteps": "No next steps possible due to lack of transcript.",
+    "Alert": "None",
+    "Sentiment": "Neutral",
+    "KeyPoints": "Transcript Unavailable"
+  }
+]

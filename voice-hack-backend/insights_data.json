@@ -79,5 +79,14 @@
     "Alert": "None",
     "Sentiment": "Neutral",
     "KeyPoints": "Transcript Unavailable"
+  },
+  {
+    "EnsightType": "final",
+    "Concerns": "Missing important product specifications; Images require size adjustment/upload; Inconsistent executive availability for video meet.",
+    "Resolution": "Advised to fill missing specifications (e.g., tank capacity) via 'view more' option to improve product score; Guided on image upload requirements (1000 pixel size) and offered to upload if provided; Offered to connect via video meet after executive's manager returns.",
+    "NextSteps": "Executive to fill missing specifications and upload/share images for upload; Executive to inform manager about video meet availability.",
+    "Alert": "",
+    "Sentiment": "Neutral -\u003e Neutral",
+    "KeyPoints": "Product specification, Catalog score, Image upload, Video meet"
   }
 ]

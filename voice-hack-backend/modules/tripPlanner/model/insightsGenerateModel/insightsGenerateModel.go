@@ -8,9 +8,9 @@ import (
 	"strings"
 	globalconstant "voice-hack-backend/globalConstant"
 	"voice-hack-backend/utilities/genaiService"
+	getdatafromvectordb "voice-hack-backend/utilities/getDataFromVectorDB"
 	"voice-hack-backend/utilities/globalFunctions"
 	llm "voice-hack-backend/utilities/llmService"
-	"voice-hack-backend/utilities/urlMedia"
 
 	"github.com/gin-gonic/gin"
 	"google.golang.org/genai"
@@ -23,7 +23,7 @@ type ApiInputParams struct {
 	CustomerCityName   string     `json:"customer_city_name" binding:"required"` // Customer city name
 	CallData           []CallData `json:"call_data" binding:"required"`          // List of call details
 	TrascriptionURLTxt []string   `json:"transcription_urlTxt"`                  // Transcription URL from call recording
-	MaxCallLimit      int        `json:"max_call_limit"`                        // Maximum call limit
+	MaxCallLimit       int        `json:"max_call_limit"`                        // Maximum call limit
 }
 
 type CallData struct {
@@ -52,6 +52,7 @@ type ApiResponse struct {
 	Error    string                    `json:"error"`
 	Response ContentGenerationResponse `json:"response"`
 }
+
 func GetCustomRules() string {
 	return `
 	Context:
@@ -164,9 +165,9 @@ Key Topics
 With every keywords mention the number of occurrences.
 
 	`
-	
 
 }
+
 // func GetSystemQuery(input ApiInputParams) string {
 // 	var b strings.Builder
 
@@ -269,7 +270,6 @@ func GetSystemQuery(input ApiInputParams) string {
 	b.WriteString("- IndiaMART: B2B marketplace connecting Sellers (Customers) with Buyers.\n")
 	b.WriteString("- Key Goals: Maximize Buyleads, optimize Catalogue Quality Score, ensure hassle-free experience.\n\n")
 
-
 	// --- 2. LOGIC BRANCHING (SINGLE VS MULTI CALL) ---
 	b.WriteString("### PROCESSING MODE ###\n")
 	if len(input.CallData) > 1 {
@@ -296,7 +296,7 @@ func GetSystemQuery(input ApiInputParams) string {
 	b.WriteString("1. IRRELEVANT BUYLEADS (Category/Location/Value issue)\n")
 	b.WriteString("   - Resolution: Executive must check category/location settings, add specific product categories, or suggest 'Filters'.\n")
 	b.WriteString("   - Upsell Opportunity: If leads are less, nudge for higher package/TrustSeal/STAR/LEADER.\n")
-	
+
 	b.WriteString("2. DOMAIN RENEW/CHANGE\n")
 	b.WriteString("   - Resolution: Guide seller to Godaddy/Provider login & upgrade from there. changing domain is NOT recommended (SEO loss).\n")
 
@@ -351,22 +351,37 @@ func GetSystemQuery(input ApiInputParams) string {
 
 	// --- 7. HISTORICAL CONTEXT INJECTION ---
 	// If history exists, inject it to help the model detect recurring patterns
-	rows := urlMedia.SafeFetchTranscriptAndSummary(fmt.Sprint(input.Glid), input.CustomerType, input.CustomerCityName)
-	if len(rows) > 0 {
-		b.WriteString("### HISTORICAL CONTEXT (Previous Calls) ###\n")
-		for _, r := range rows {
-			b.WriteString("• Summary: " + r.Summary + "\n")
-		}
-		b.WriteString("Use this history to detect repeat tickets or unresolved recurring issues.\n\n")
+	// rows := urlMedia.SafeFetchTranscriptAndSummary(fmt.Sprint(input.Glid), input.CustomerType, input.CustomerCityName)
+	// if len(rows) > 0 {
+	// 	b.WriteString("### HISTORICAL CONTEXT (Previous Calls) ###\n")
+	// 	for _, r := range rows {
+	// 		b.WriteString("• Summary: " + r.Summary + "\n")
+	// 	}
+	// 	b.WriteString("Use this history to detect repeat tickets or unresolved recurring issues.\n\n")
+	// }
+	b.WriteString("- Use historical patterns as reference:\n")
+
+	n := len(input.TrascriptionURLTxt)
+	if n == 0 {
+		b.WriteString("  No transcription data available.\n")
+
+	}
+
+	callsPerTranscript := input.MaxCallLimit / n
+	if callsPerTranscript == 0 {
+		callsPerTranscript = 1 // ensure at least 1 call per transcript
+	}
+
+	for i := 0; i < n; i++ {
+		sampleCalls, _ := getdatafromvectordb.GetSampleCalls(input.TrascriptionURLTxt[i], callsPerTranscript)
+		b.WriteString(sampleCalls)
+		b.WriteString("\n") // optional: add spacing between each transcript
 	}
 
 	b.WriteString("Ensure the response is strictly valid JSON.")
-
+	fmt.Println(b.String())
 	return b.String()
 }
-
-
-
 
 func GenerateUserQuery(apiInputParams ApiInputParams) string {
 	var b strings.Builder
@@ -388,7 +403,7 @@ func GenerateUserQuery(apiInputParams ApiInputParams) string {
 		b.WriteString(fmt.Sprintf("- Call Type: %s\n", call.CallType))
 		b.WriteString(fmt.Sprintf("- Call Date: %s\n", call.CallDate))
 
-        // Transcription text
+		// Transcription text
 		if len(apiInputParams.TrascriptionURLTxt) > i {
 			b.WriteString(fmt.Sprintf("Transcript %d:\n%s\n", i+1, apiInputParams.TrascriptionURLTxt[i]))
 		} else {
@@ -426,16 +441,16 @@ func GenerateUserQuery(apiInputParams ApiInputParams) string {
 	return b.String()
 }
 
-// func FindSampleDatePacket(callType string) string {
-// 	sampleData := map[string]string{
-// 		"PN":  "Customer called to inquire about new product features and pricing plans.",
-// 		"C2C": "Customer expressed dissatisfaction with recent service outages and requested compensation.",
-// 	}
-// 	if data, exists := sampleData[callType]; exists {
-// 		return data
-// 	}
-// 	return "General inquiry about services and support."
-// }
+//	func FindSampleDatePacket(callType string) string {
+//		sampleData := map[string]string{
+//			"PN":  "Customer called to inquire about new product features and pricing plans.",
+//			"C2C": "Customer expressed dissatisfaction with recent service outages and requested compensation.",
+//		}
+//		if data, exists := sampleData[callType]; exists {
+//			return data
+//		}
+//		return "General inquiry about services and support."
+//	}
 func GenerateInsightsFromLLM(ginCtx *gin.Context, userQuery string, input ApiInputParams) (result ContentGenerationResponse, err error) {
 	// Call LLM service
 	systemQuery := GetSystemQuery(input)
@@ -574,7 +589,6 @@ func CreateApplicationLogs(ginCtx *gin.Context, apiInputParams ApiInputParams, a
 	globalFunctions.WriteJsonLogs(ginCtx, fileName, logData)
 }
 
-
 // StoreInsightsToJSON appends new insights into insights_data.json
 func StoreInsightsToJSON(newData []Ensights) error {
 	fileName := "insights_data.json"
@@ -597,8 +611,8 @@ func StoreInsightsToJSON(newData []Ensights) error {
 	// -------------------------------
 	// 2. Append new data to old data
 	// -------------------------------
-	if len(newData) > 1{
-		newData= newData[:len(newData)-1]
+	if len(newData) > 1 {
+		newData = newData[:len(newData)-1]
 	}
 	existingData = append(existingData, newData...)
 	// If newData contains more than one element, remove the last index of existingData
@@ -660,7 +674,6 @@ func FinalSummary(apiInputParams ApiInputParams) (*Ensights, error) {
 	// ✅ Return the final aggregated insight
 	return &finalEnsight, nil
 }
-
 
 func LoadAllInsightsFromJSON() ([]Ensights, error) {
 	fileName := "insights_data.json"

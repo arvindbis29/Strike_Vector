@@ -13,12 +13,14 @@ import (
 	pc "github.com/pinecone-io/go-pinecone/pinecone"
 )
 
+//"pcsk_6VcVxq_QvKbhRAvWRg8iAJDUdY6STdzHaRckmwRTsqPrEQs7HfuudesdDsAFQiUw1kqovh"
+// "sk-gDgbFkH2KH-HKvX2a4uEXw"
 // ===============================
 //        CONFIG
 // ===============================
 var (
-	LLM_GATEWAY_KEY = "sk-gDgbFkH2KH-HKvX2a4uEXw" // Replace with your key
-	PINECONE_KEY    = "pcsk_6VcVxq_QvKbhRAvWRg8iAJDUdY6STdzHaRckmwRTsqPrEQs7HfuudesdDsAFQiUw1kqovh"
+	LLM_GATEWAY_KEY = ""  // Replace with your key
+	PINECONE_KEY    = ""  // Replace with your key
 	PINECONE_HOST   = "https://insights-fv7quol.svc.aped-4627-b74a.pinecone.io"
 	PINECONE_INDEX  = "insights"
 	NAMESPACE       = "default"

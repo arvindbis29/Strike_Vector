@@ -696,50 +696,110 @@ func LoadAllInsightsFromJSON() ([]Ensights, error) {
 
 	return insights, nil
 }
+// func BuildFinalInsightsQuery(allInsights []Ensights, input ApiInputParams) string {
+// 	var b strings.Builder
+
+// 	b.WriteString("You are an expert Voice Insights Engine for IndiaMART.\n")
+// 	b.WriteString("You are given multiple individual insights from different calls.\n")
+// 	b.WriteString("Your job is to generate ONE FINAL aggregated insight block.\n\n")
+
+// 	b.WriteString("### INPUT INSIGHTS ###\n")
+
+// 	for i, ins := range allInsights {
+// 		if input.MaxCallLimit < i+1 {
+// 			break
+// 		}
+// 		b.WriteString(fmt.Sprintf("CALL %d:\n", i+1))
+// 		b.WriteString(fmt.Sprintf("- Concerns: %s\n", ins.Concerns))
+// 		b.WriteString(fmt.Sprintf("- Resolution: %s\n", ins.Resolution))
+// 		b.WriteString(fmt.Sprintf("- NextSteps: %s\n", ins.NextSteps))
+// 		b.WriteString(fmt.Sprintf("- Alert: %s\n", ins.Alert))
+// 		b.WriteString(fmt.Sprintf("- Sentiment: %s\n", ins.Sentiment))
+// 		b.WriteString(fmt.Sprintf("- KeyPoints: %s\n\n", ins.KeyPoints))
+// 	}
+
+// 	b.WriteString("### INSTRUCTIONS ###\n")
+// 	b.WriteString("- Combine and summarize all concerns.\n")
+// 	b.WriteString("- Detect repeated patterns across calls.\n")
+// 	b.WriteString("- Identify root causes.\n")
+// 	b.WriteString("- Generate high-quality Resolution and NextSteps.\n")
+// 	b.WriteString("- Output only ONE insight block.\n")
+// 	b.WriteString("- EnsightType must be 'final'.\n")
+// 	b.WriteString("- Output strictly valid JSON matching this structure:\n\n")
+
+// 	ex := Ensights{
+// 		EnsightType: "final",
+// 		Concerns:    "Summary of all major repeated concerns",
+// 		Resolution:  "Combined resolution from all calls",
+// 		NextSteps:   "Clear next actions for Executive & Customer",
+// 		Alert:       "Any critical risk or upsell opportunity",
+// 		Sentiment:   "Overall sentiment trend",
+// 		KeyPoints:   "keywords",
+// 	}
+// 	exampleBytes, _ := json.MarshalIndent(ex, "", "  ")
+
+// 	b.WriteString(string(exampleBytes) + "\n\n")
+// 	b.WriteString("Return ONLY JSON.")
+
+// 	return b.String()
+// }
 func BuildFinalInsightsQuery(allInsights []Ensights, input ApiInputParams) string {
-	var b strings.Builder
+    var b strings.Builder
 
-	b.WriteString("You are an expert Voice Insights Engine for IndiaMART.\n")
-	b.WriteString("You are given multiple individual insights from different calls.\n")
-	b.WriteString("Your job is to generate ONE FINAL aggregated insight block.\n\n")
+    b.WriteString("You are an expert, quantitative Voice Insights Engine who generates Insight for IndiaMART Higher Authorities (VP, Product Manager, Senior Sales/Ops Manager).\n")
+    b.WriteString("You are given multiple individual, call-level insights for the same or different seller.\n")
+    b.WriteString("Your job is to generate ONE FINAL aggregated insight block that is QUANTITATIVE and ACTIONABLE.\n\n")
 
-	b.WriteString("### INPUT INSIGHTS ###\n")
+    // --- 1. INPUT INSIGHTS ---
+    b.WriteString("### RAW CALL INSIGHTS ###\n")
 
-	for i, ins := range allInsights {
-		if input.MaxCallLimit < i+1 {
-			break
-		}
-		b.WriteString(fmt.Sprintf("CALL %d:\n", i+1))
-		b.WriteString(fmt.Sprintf("- Concerns: %s\n", ins.Concerns))
-		b.WriteString(fmt.Sprintf("- Resolution: %s\n", ins.Resolution))
-		b.WriteString(fmt.Sprintf("- NextSteps: %s\n", ins.NextSteps))
-		b.WriteString(fmt.Sprintf("- Alert: %s\n", ins.Alert))
-		b.WriteString(fmt.Sprintf("- Sentiment: %s\n", ins.Sentiment))
-		b.WriteString(fmt.Sprintf("- KeyPoints: %s\n\n", ins.KeyPoints))
-	}
+    // Input loop remains the same to feed all prior insights to the model
+    for i, ins := range allInsights {
+        if input.MaxCallLimit < i+1 {
+            break
+        }
+        b.WriteString(fmt.Sprintf("CALL %d:\n", i+1))
+        b.WriteString(fmt.Sprintf("- Concerns: %s\n", ins.Concerns))
+        b.WriteString(fmt.Sprintf("- Resolution: %s\n", ins.Resolution))
+        b.WriteString(fmt.Sprintf("- NextSteps: %s\n", ins.NextSteps))
+        b.WriteString(fmt.Sprintf("- Alert: %s\n", ins.Alert))
+        b.WriteString(fmt.Sprintf("- Sentiment: %s\n", ins.Sentiment))
+        b.WriteString(fmt.Sprintf("- KeyPoints: %s\n\n", ins.KeyPoints))
+    }
+    
+    // --- 2. INSTRUCTIONS FOR QUANTITATIVE AGGREGATION ---
+    b.WriteString("### QUANTITATIVE AGGREGATION INSTRUCTIONS ###\n")
+    b.WriteString("- Analyze all calls to identify recurring issues, failure rates, and opportunities.\n")
+    b.WriteString("- The output MUST be QUANTITATIVE, using percentages or counts (e.g., 20% of calls, 4/10 cases).\n")
+    b.WriteString("- Ensure NextSteps and Resolutions are targeted at specific personas (Executive, Manager, Sales Head, Product, Category).\n")
+    b.WriteString("- Output only ONE insight block with EnsightType = 'final'.\n")
+    b.WriteString("- All pointers in the final block MUST be concise and in a list/bullet format.\n\n")
 
-	b.WriteString("### INSTRUCTIONS ###\n")
-	b.WriteString("- Combine and summarize all concerns.\n")
-	b.WriteString("- Detect repeated patterns across calls.\n")
-	b.WriteString("- Identify root causes.\n")
-	b.WriteString("- Generate high-quality Resolution and NextSteps.\n")
-	b.WriteString("- Output only ONE insight block.\n")
-	b.WriteString("- EnsightType must be 'final'.\n")
-	b.WriteString("- Output strictly valid JSON matching this structure:\n\n")
+    // --- 3. FIELD MAPPING TO QUANTITATIVE FORMAT ---
+    b.WriteString("### FIELD LOGIC (Quantitative Format) ###\n")
+    b.WriteString("Concerns: Summarise all recurring issues with their quantitative recurrence (e.g., 'Irrelevant Buyleads (40% of calls)').\n")
+    b.WriteString("Resolution: Summarize resolutions given, identifying systemic failures or best practices quantitatively.\n")
+    b.WriteString("NextSteps: Define clear actionables for relevant personas (Executive, Product Manager, Sales Manager, etc.).\n")
+    b.WriteString("Alert: Aggregate all alerts and state the concerned person/team.\n")
+    b.WriteString("Sentiment: Summarise the sentiment distribution quantitatively (e.g., '60% Negative, 30% Neutral, 10% Positive').\n")
+    b.WriteString("KeyPoints: List all distinct keywords with their total occurrence count across all calls (e.g., 'Buyleads (10), Catalogue (4)').\n")
 
-	ex := Ensights{
-		EnsightType: "final",
-		Concerns:    "Summary of all major repeated concerns",
-		Resolution:  "Combined resolution from all calls",
-		NextSteps:   "Clear next actions for Executive & Customer",
-		Alert:       "Any critical risk or upsell opportunity",
-		Sentiment:   "Overall sentiment trend",
-		KeyPoints:   "keywords",
-	}
-	exampleBytes, _ := json.MarshalIndent(ex, "", "  ")
 
-	b.WriteString(string(exampleBytes) + "\n\n")
-	b.WriteString("Return ONLY JSON.")
+    // --- 4. JSON STRUCTURE (Quantitative Example) ---
+    ex := Ensights{
+        EnsightType: "final",
+        Concerns:    "Irrelevant Buyleads (40% of calls); Product Catalogue issues (30% of calls)",
+        Resolution:  "4/10 executives failed to update category settings; Need automated bulk lead filter guidance.",
+        NextSteps:   "Executive: 4/10 need training on lead qualification; Category Manager: Advise categories for SEO work; Product Manager: Simplify catalogue upload journey.",
+        Alert:       "20% Upsell Opportunity cases identified for Sales Manager follow-up; 10% Executive Inefficiency (rude behavior).",
+        Sentiment:   "Negative (60%) -> Neutral (30%) -> Positive (10%)",
+        KeyPoints:   "Buyleads (10), Catalogue (4), Upsell (2), Inefficiency (1)",
+    }
+    exampleBytes, _ := json.MarshalIndent(ex, "", "  ")
 
-	return b.String()
+    b.WriteString("\n### OUTPUT JSON MUST STRICTLY FOLLOW THIS QUANTITATIVE STRUCTURE ###\n")
+    b.WriteString(string(exampleBytes) + "\n\n")
+    b.WriteString("Return ONLY JSON.")
+
+    return b.String()
 }

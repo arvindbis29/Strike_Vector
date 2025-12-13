@@ -88,5 +88,14 @@
     "Alert": "",
     "Sentiment": "Neutral -\u003e Neutral",
     "KeyPoints": "Product specification, Catalog score, Image upload, Video meet"
+  },
+  {
+    "EnsightType": "final",
+    "Concerns": "Missing important product specifications (e.g., tank capacity); Image size issues; Images need to be removed/uploaded.",
+    "Resolution": "Guided user on how to add missing specifications like 'tank capacity' by clicking 'view more' and saving the details. Advised on image size requirements (1000 pixels) and offered to upload images if provided by the customer or their manager.",
+    "NextSteps": "Customer to upload correct size images and fill missing specifications. Executive to follow up if customer manager provides photos.",
+    "Alert": "None",
+    "Sentiment": "Neutral -\u003e Neutral",
+    "KeyPoints": "Product specifications, Image upload, Catalogue score"
   }
 ]

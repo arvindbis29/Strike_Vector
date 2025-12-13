@@ -48,7 +48,7 @@ func FinalSummaryGenerate(ginCtx *gin.Context) {
 	}
 
 	// Prepare response
-	apiResponse.Response.Locations = []insightsGenerateModel.Ensights{*resp}
+	apiResponse.Response.Locations = []insightsGenerateModel.Insights{*resp}
 	apiResponse.Code = http.StatusOK
 	apiResponse.Status = "Success"
 

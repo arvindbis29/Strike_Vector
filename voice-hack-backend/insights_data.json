@@ -1,101 +1,29 @@
 [
   {
-    "EnsightType": "call_1",
-    "Concerns": "Images need to be removed and details are missing for some products; Some product images are low resolution and are causing issues; Important specifications are missing for some products.",
-    "Resolution": "Executive guided the customer on how to delete images and mentioned that she is handling low-resolution images. Executive also guided on how to add missing specifications by clicking 'view more' and filling in details like 'tank capacity'.",
-    "NextSteps": "Customer will upload available photos and inform her manager if further assistance is needed from the executive. Executive to inform if customer needs to add images themselves or if the executive will add them.",
+    "InsightType": "call_1",
+    "Concerns": "Missing critical product specifications (e.g., tank capacity); Images with insufficient pixel dimensions; Need to delete specific images.",
+    "Resolution": "Advised on how to add missing specifications via 'view more' option; Explained that saving specifications increases product score; Offered to add images if provided in 1000px format or to inform the manager if they have the correct images.",
+    "NextSteps": "Executive to follow up on adding missing specifications and images. Customer to check for correct images and inform manager.",
     "Alert": "None",
     "Sentiment": "Neutral -\u003e Neutral",
-    "KeyPoints": "Catalog Update, Image Size, Missing Specifications, Product Score"
+    "KeyPoints": "Product Specification, Image Size, Catalog Score, View More Option"
   },
   {
-    "EnsightType": "call_2",
-    "Concerns": "Issues with items being picked up without price; Need to add prices for better visibility and to address inquiry issues; Customer is concerned about wasting time on manual updates.",
-    "Resolution": "Executive explained that prices are crucial for visibility and to resolve inquiry issues. Advised adding standard pricing or MRP. Offered to make corrections himself if the customer provides details, and stated that grouping, mapping, PDFs, and videos are already in place.",
-    "NextSteps": "Customer will check and send product images. Executive will email the customer on 'director@lornaghorita.com' with a list of products needing corrections.",
+    "InsightType": "call_2",
+    "Concerns": "Inconsistent pricing in catalog; Potential for higher visibility with correct pricing; Need for updated product images.",
+    "Resolution": "Advised to add MRP or standard pricing to boost visibility and lead generation; Offered to make corrections directly after receiving details via email; Confirmed grouping and mapping were corrected and PDF was added.",
+    "NextSteps": "Executive to email the customer with a list of products needing corrections. Customer to send updated images and confirm any necessary changes.",
     "Alert": "None",
     "Sentiment": "Neutral -\u003e Neutral",
-    "KeyPoints": "Catalog Update, Pricing, Visibility, Inquiries, Product Details"
+    "KeyPoints": "Product Pricing, Catalog Visibility, Lead Generation, Product Images, MRP"
   },
   {
-    "EnsightType": "call_3",
+    "InsightType": "call_3",
     "Concerns": "No transcript available for analysis.",
-    "Resolution": "No resolution possible due to lack of transcript.",
-    "NextSteps": "No next steps possible due to lack of transcript.",
+    "Resolution": "N/A",
+    "NextSteps": "N/A",
     "Alert": "None",
     "Sentiment": "Neutral",
-    "KeyPoints": "Missing Transcript"
-  },
-  {
-    "EnsightType": "call_1",
-    "Concerns": "Images need to be removed and re-added; Some images are low resolution; Missing important product specifications.",
-    "Resolution": "Executive guided the customer on how to delete and add images. Advised on filling missing specifications like 'tank capacity' for products to improve product score. Explained that adding specifications increases the product score.",
-    "NextSteps": "Customer will upload available photos and inform if further assistance is needed from the manager to add photos. Customer to inform when manager is available for video meet.",
-    "Alert": "None",
-    "Sentiment": "Neutral -\u003e Neutral",
-    "KeyPoints": "Catalog update, Image quality, Product specifications, Product score"
-  },
-  {
-    "EnsightType": "call_2",
-    "Concerns": "Catalog items are not being picked up without price; Customer is hesitant to add prices due to high dealer costs; Need for image updates for specific products.",
-    "Resolution": "Executive explained that adding standard pricing or MRP can boost visibility and inquiries. Offered to make corrections directly if the customer provides the details. Sent an email to the customer's provided ID listing products that need image updates.",
-    "NextSteps": "Customer will check the catalog and send required product images to the executive. Executive to send an email with a list of products needing image updates.",
-    "Alert": "None",
-    "Sentiment": "Neutral -\u003e Neutral",
-    "KeyPoints": "Catalog update, Pricing, Visibility, Product images, Email communication"
-  },
-  {
-    "EnsightType": "call_3",
-    "Concerns": "No transcript available for analysis.",
-    "Resolution": "No resolution possible due to lack of transcript.",
-    "NextSteps": "No next steps possible due to lack of transcript.",
-    "Alert": "None",
-    "Sentiment": "Neutral",
-    "KeyPoints": "Missing data"
-  },
-  {
-    "EnsightType": "call_1",
-    "Concerns": "Images are low resolution and need to be removed; Missing important product specifications.",
-    "Resolution": "Executive guided the customer on how to delete low-resolution images and add missing specifications, using 'Garden spray bottle 2 liter' as an example. Advised on how filling specifications increases product score.",
-    "NextSteps": "Customer will upload available photos and inform if further assistance is needed from the manager for specific photos. Executive to follow up on video meet.",
-    "Alert": "None",
-    "Sentiment": "Neutral -\u003e Neutral",
-    "KeyPoints": "Catalog Update, Image Quality, Product Specifications, Product Score"
-  },
-  {
-    "EnsightType": "call_2",
-    "Concerns": "Some items were not picked up due to missing prices; Customer is hesitant to add prices, citing high MRP.",
-    "Resolution": "Executive explained the importance of adding standard pricing for visibility and lead generation. Offered to make corrections himself if the customer provides the necessary details (images). Confirmed grouping, mapping, PDFs, and videos are in place.",
-    "NextSteps": "Customer will send required images to the executive's provided email ID. Executive will send a mail detailing products that need image updates.",
-    "Alert": "None",
-    "Sentiment": "Neutral -\u003e Neutral",
-    "KeyPoints": "Catalog Update, Pricing, Visibility, Leads, Images, Product Details"
-  },
-  {
-    "EnsightType": "call_3",
-    "Concerns": "No transcript available for analysis.",
-    "Resolution": "No resolution possible due to lack of transcript.",
-    "NextSteps": "No next steps possible due to lack of transcript.",
-    "Alert": "None",
-    "Sentiment": "Neutral",
-    "KeyPoints": "Transcript Unavailable"
-  },
-  {
-    "EnsightType": "final",
-    "Concerns": "Missing important product specifications; Images require size adjustment/upload; Inconsistent executive availability for video meet.",
-    "Resolution": "Advised to fill missing specifications (e.g., tank capacity) via 'view more' option to improve product score; Guided on image upload requirements (1000 pixel size) and offered to upload if provided; Offered to connect via video meet after executive's manager returns.",
-    "NextSteps": "Executive to fill missing specifications and upload/share images for upload; Executive to inform manager about video meet availability.",
-    "Alert": "",
-    "Sentiment": "Neutral -\u003e Neutral",
-    "KeyPoints": "Product specification, Catalog score, Image upload, Video meet"
-  },
-  {
-    "EnsightType": "final",
-    "Concerns": "Missing important product specifications (e.g., tank capacity); Image size issues; Images need to be removed/uploaded.",
-    "Resolution": "Guided user on how to add missing specifications like 'tank capacity' by clicking 'view more' and saving the details. Advised on image size requirements (1000 pixels) and offered to upload images if provided by the customer or their manager.",
-    "NextSteps": "Customer to upload correct size images and fill missing specifications. Executive to follow up if customer manager provides photos.",
-    "Alert": "None",
-    "Sentiment": "Neutral -\u003e Neutral",
-    "KeyPoints": "Product specifications, Image upload, Catalogue score"
+    "KeyPoints": "No Transcript"
   }
 ]

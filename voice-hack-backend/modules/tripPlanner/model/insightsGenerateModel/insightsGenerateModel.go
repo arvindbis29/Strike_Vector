@@ -17,11 +17,11 @@ import (
 )
 
 type ApiInputParams struct {
-	Glid               int        `json:"glid" binding:"required"`               // GL user ID
-	ExecutiveID        string     `json:"executive_id" binding:"required"`       // Executive ID
-	CustomerType       string     `json:"customer_type" binding:"required"`      // Customer type: New or Existing
-	CustomerCityName   string     `json:"customer_city_name" binding:"required"` // Customer city name
-	CallData           []CallData `json:"call_data" binding:"required"`          // List of call details
+	Glid               int        `json:"glid" `               // GL user ID
+	ExecutiveID        string     `json:"executive_id" `       // Executive ID
+	CustomerType       string     `json:"customer_type" `      // Customer type: New or Existing
+	CustomerCityName   string     `json:"customer_city_name" ` // Customer city name
+	CallData           []CallData `json:"call_data" `          // List of call details
 	TrascriptionURLTxt []string   `json:"transcription_urlTxt"`                  // Transcription URL from call recording
 	MaxCallLimit       int        `json:"max_call_limit"`                        // Maximum call limit
 }
@@ -32,8 +32,8 @@ type CallData struct {
 	CallDate         string `json:"call_date"`          // Call date
 }
 
-type Ensights struct {
-	EnsightType string `json:"EnsightType"`
+type Insights struct {
+	InsightType string `json:"InsightType"`
 	Concerns    string `json:"Concerns"`
 	Resolution  string `json:"Resolution"`
 	NextSteps   string `json:"NextSteps"`
@@ -43,7 +43,7 @@ type Ensights struct {
 }
 
 type ContentGenerationResponse struct {
-	Locations []Ensights `json:"ensights"`
+	Locations []Insights `json:"Insights"`
 }
 
 type ApiResponse struct {
@@ -213,7 +213,7 @@ With every keywords mention the number of occurrences.
 
 // 	// JSON STRUCTURE EXAMPLE
 // 	example := &ContentGenerationResponse{
-// 		Locations: []Ensights{
+// 		Locations: []Insights{
 // 			{
 // 				EnsightType: "call_1",
 // 				Concerns:    "Customer confused about subscription renewal",
@@ -334,9 +334,9 @@ func GetSystemQuery(input ApiInputParams) string {
 
 	// --- 6. JSON STRUCTURE ---
 	example := &ContentGenerationResponse{
-		Locations: []Ensights{
+		Locations: []Insights{
 			{
-				EnsightType: "final",
+				InsightType: "final",
 				Concerns:    "Insufficient buy leads; Irrelevant location leads",
 				Resolution:  "Advised bulk filters; Checked location settings",
 				NextSteps:   "Executive to call back tomorrow to verify lead quality",
@@ -367,6 +367,10 @@ func GetSystemQuery(input ApiInputParams) string {
 
 	}
 
+	if input.MaxCallLimit <= 0 {
+		input.MaxCallLimit = 10 // default limit
+
+	}
 	callsPerTranscript := input.MaxCallLimit / n
 	if callsPerTranscript == 0 {
 		callsPerTranscript = 1 // ensure at least 1 call per transcript
@@ -505,13 +509,13 @@ func GenerateInsights(ginCtx *gin.Context, userQuery string, input ApiInputParam
 		},
 	}
 
-	// Configure the response schema to match Ensights structure
+	// Configure the response schema to match Insights structure
 	contentGenerateConfig := genai.GenerateContentConfig{
 		ResponseMIMEType: "application/json",
 		ResponseSchema: &genai.Schema{
 			Type: genai.TypeObject,
 			Properties: map[string]*genai.Schema{
-				"ensights": { // Matches ContentGenerationResponse.Locations
+				"Insights": { // Matches ContentGenerationResponse.Locations
 					Type: genai.TypeArray,
 					Items: &genai.Schema{
 						Type: genai.TypeObject,
@@ -528,7 +532,7 @@ func GenerateInsights(ginCtx *gin.Context, userQuery string, input ApiInputParam
 					},
 				},
 			},
-			Required: []string{"ensights"},
+			Required: []string{"Insights"},
 		},
 		Tools: nil, //[]*genai.Tool{{GoogleSearch: &genai.GoogleSearch{}}},
 		// Optional: can add search or other tools if needed
@@ -590,10 +594,10 @@ func CreateApplicationLogs(ginCtx *gin.Context, apiInputParams ApiInputParams, a
 }
 
 // StoreInsightsToJSON appends new insights into insights_data.json
-func StoreInsightsToJSON(newData []Ensights) error {
+func StoreInsightsToJSON(newData []Insights) error {
 	fileName := "insights_data.json"
 
-	var existingData []Ensights
+	var existingData []Insights
 
 	// -------------------------------
 	// 1. Check if file exists
@@ -636,7 +640,7 @@ func StoreInsightsToJSON(newData []Ensights) error {
 	return nil
 }
 
-func FinalSummary(apiInputParams ApiInputParams) (*Ensights, error) {
+func FinalSummary(apiInputParams ApiInputParams) (*Insights, error) {
 	// 1️⃣ Load stored insights from JSON
 	allInsights, err := LoadAllInsightsFromJSON()
 	if err != nil {
@@ -665,8 +669,8 @@ func FinalSummary(apiInputParams ApiInputParams) (*Ensights, error) {
 		return nil, fmt.Errorf("failed to extract JSON from LLM response: %v", err)
 	}
 
-	// 5️⃣ Unmarshal JSON into Ensights struct
-	var finalEnsight Ensights
+	// 5️⃣ Unmarshal JSON into Insights struct
+	var finalEnsight Insights
 	if err := json.Unmarshal([]byte(rawJSON), &finalEnsight); err != nil {
 		return nil, fmt.Errorf("failed to unmarshal LLM JSON response: %v", err)
 	}
@@ -675,19 +679,19 @@ func FinalSummary(apiInputParams ApiInputParams) (*Ensights, error) {
 	return &finalEnsight, nil
 }
 
-func LoadAllInsightsFromJSON() ([]Ensights, error) {
+func LoadAllInsightsFromJSON() ([]Insights, error) {
 	fileName := "insights_data.json"
 
 	data, err := os.ReadFile(fileName)
 	if err != nil {
 		// If file not found → return empty
 		if os.IsNotExist(err) {
-			return []Ensights{}, nil
+			return []Insights{}, nil
 		}
 		return nil, err
 	}
 
-	var insights []Ensights
+	var insights []Insights
 	if len(data) > 0 {
 		if err := json.Unmarshal(data, &insights); err != nil {
 			return nil, err
@@ -696,7 +700,7 @@ func LoadAllInsightsFromJSON() ([]Ensights, error) {
 
 	return insights, nil
 }
-// func BuildFinalInsightsQuery(allInsights []Ensights, input ApiInputParams) string {
+// func BuildFinalInsightsQuery(allInsights []Insights, input ApiInputParams) string {
 // 	var b strings.Builder
 
 // 	b.WriteString("You are an expert Voice Insights Engine for IndiaMART.\n")
@@ -727,7 +731,7 @@ func LoadAllInsightsFromJSON() ([]Ensights, error) {
 // 	b.WriteString("- EnsightType must be 'final'.\n")
 // 	b.WriteString("- Output strictly valid JSON matching this structure:\n\n")
 
-// 	ex := Ensights{
+// 	ex := Insights{
 // 		EnsightType: "final",
 // 		Concerns:    "Summary of all major repeated concerns",
 // 		Resolution:  "Combined resolution from all calls",
@@ -743,7 +747,7 @@ func LoadAllInsightsFromJSON() ([]Ensights, error) {
 
 // 	return b.String()
 // }
-func BuildFinalInsightsQuery(allInsights []Ensights, input ApiInputParams) string {
+func BuildFinalInsightsQuery(allInsights []Insights, input ApiInputParams) string {
     var b strings.Builder
 
     b.WriteString("You are an expert, quantitative Voice Insights Engine who generates Insight for IndiaMART Higher Authorities (VP, Product Manager, Senior Sales/Ops Manager).\n")
@@ -786,8 +790,8 @@ func BuildFinalInsightsQuery(allInsights []Ensights, input ApiInputParams) strin
 
 
     // --- 4. JSON STRUCTURE (Quantitative Example) ---
-    ex := Ensights{
-        EnsightType: "final",
+    ex := Insights{
+        InsightType: "final",
         Concerns:    "Irrelevant Buyleads (40% of calls); Product Catalogue issues (30% of calls)",
         Resolution:  "4/10 executives failed to update category settings; Need automated bulk lead filter guidance.",
         NextSteps:   "Executive: 4/10 need training on lead qualification; Category Manager: Advise categories for SEO work; Product Manager: Simplify catalogue upload journey.",
